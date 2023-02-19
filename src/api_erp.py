@@ -17,6 +17,7 @@ def connection():
 app=Flask(__name__)
 #conn = connection()
 
+# Genera el contenido de una tabla en Json
 @app.route('/erpjav', methods=['GET'])
 def index_erp():  # antes listar_cursos
     conn = connection()
@@ -100,7 +101,7 @@ def backup_avro(tablename):
     elif tablename=="hired_employees":
         filename = 'backups\hired_employees.avro'
         #sql="SELECT * FROM dbo.HiredEmployees order by Id;"
-        sql="SELECT Id, [Name], Replace(convert(varchar,getdate(),111),'/','-')+'T'+convert(varchar,Datetime_Hired, 108)+'z' Datetime_Hired, Department_Id, Job_Id FROM dbo.HiredEmployees order by Id;"
+        sql="SELECT Id, [Name], Replace(convert(varchar,getdate(),111),'/','-')+'T'+convert(varchar,Datetime_Hired, 108)+'Z' Datetime_Hired, Department_Id, Job_Id FROM dbo.HiredEmployees order by Id;"
     else:
         return jsonify({'Message':"Error in table name to backup"})
 
@@ -135,8 +136,52 @@ def backup_avro(tablename):
 
         return jsonify({'Message':"Table "+tablename+' has backed up in avro format: OK'})
     
+    except Exception as ex:
+        return jsonify({'Message':"Error: I couldn't backup table "+tablename})
+    finally:
+        conn.close()
+
+#restore por tabla desde backup en formato avro
+@app.route('/erpjav1/restore/<tablename>', methods=['PUT'])
+def restore_avro(tablename):
+    if tablename=="departments":
+        filename = 'backups\departments.avro'
+        sql="Insert into dbo.Departments (Id, Department) Values (?, ?);"
+    elif tablename=="jobs":
+        filename = 'backups\jobs.avro'
+        sql="Insert into dbo.Jobs (Id, Job) Values (?, ?);"
+    elif tablename=="hired_employees":
+        filename = 'backups\hired_employees.avro'
+        sql="Insert into dbo.HiredEmployees (Id, Name, Datetime_Hired, Department_Id, Job_Id) Values (?, ?, ?, ?, ?);"
+    else:
+        return jsonify({'Message':"Error in table name to backup"})
+
+    try:
+        avro_records = []       # 1. List to store the records
+        # 2. Read the Avro file
+        with open(filename, 'rb') as fo:
+            avro_reader = reader(fo)
+            for record in avro_reader:
+                avro_records.append(record)
+
+        df_avro = pandas.DataFrame(avro_records)  # Convert to dataframe pandas
+
+        conn = connection()
+        cursor = conn.cursor()
+        batch=df_avro.values.tolist()
+        for row in batch:
+            print(row)
+            #try:
+            cursor.execute(sql, row)    #Inserta el registro
+            #except Exception as ex:
+                #log_errados.append(row)     #print(row)
+            cursor.commit()  ##Toca hacer el commit inmediatamente porque sino, se pierden registros ***
+
+        cursor.close()
+        return jsonify({'Message':"Table "+tablename+' has been retored from avro format: OK'})
+    
     #except Exception as ex:
-        #return jsonify({'Message':"Error: I couldn't backup table "+tablename})
+        #return jsonify({'Message':"Error: I couldn't restore table "+tablename})
     finally:
         conn.close()
 
@@ -181,6 +226,37 @@ def data_schema(filename):
             ]
         }
     return schema
+
+@app.route('/erpjav/<report_name>', methods=['GET'])
+def gen_reports(report_name):  # antes listar_cursos
+    try:
+        if report_name=="employees_quarters":
+            sql="Select * from dbo.vwEmployeesHiredByQuarter where Year_Hired = 2021 Order by Year_Hired, Department, Job;"
+            report_title="Employees hires by Department/Job in year 2021"
+        elif report_name=="employees_average":
+            sql="Select * from dbo.vwEmployeesHiredByDeparments_Year where Year_Hired = 2021 and TotHiresXDep_Year >	AvgYear Order by Year_Hired, TotHiresXDep_Year desc;"
+            report_title="Total Employees hires in year 2021 greater than average company"
+        else:
+            return jsonify({'Message':"** Error in report name entered **"})
+
+        conn = connection()
+        cursor = conn.cursor()
+        cursor.execute(sql)
+        data=cursor.fetchall()
+
+        # mapping records: Convert data framework to list
+        resume_result=[]
+        for row in data:
+            if report_name=="employees_quarters":
+                row_result={'Year_Hired':row[0], 'Department':row[1], 'Job':row[2], 'Q1':row[3], 'Q2':row[4], 'Q3':row[5], 'Q4':row[6]}
+            elif report_name=="employees_average":
+                row_result={'Year_Hired':row[0], 'Department_Id':row[1], 'Department':row[2], 'TotHiresXDep_Year':row[3], 'AvgYear':row[4]}
+            resume_result.append(row_result)
+        return jsonify({'Result':resume_result, 'Message':report_title})    
+    except Exception as ex:
+        return jsonify({'Message':"Error !!!"})
+    finally:
+        conn.close()
 
 def pagina_no_encontrada(error):
     return "<h1>Página no existe...</h1>", 404
