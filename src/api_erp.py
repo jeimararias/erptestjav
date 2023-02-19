@@ -17,32 +17,7 @@ def connection():
 app=Flask(__name__)
 #conn = connection()
 
-# Genera el contenido de una tabla en Json
-@app.route('/erpjav', methods=['GET'])
-def index_erp():  # antes listar_cursos
-    conn = connection()
-    try:
-        cursor = conn.cursor()
-        sql="SELECT * FROM dbo.Departments order by Id"
-        cursor.execute(sql)
-        #for row in cursor.fetchall():
-        #    cars.append({"id": row[0], "name": row[1], "year": row[2], "price": row[3]})
-        data=cursor.fetchall()
-        # mapping records
-        Deparments=[]
-        for row in data:
-            department={'Id':row[0], 'Department':row[1]}
-            Deparments.append(department)
-
-        #print(data)
-        #return "Hi Jeimar !! You app is going conectar sql .."
-        return jsonify({'Deparments':Deparments, 'Message':"Department list"})    
-    except Exception as ex:
-        #return "Error"
-        return jsonify({'Message':"Error !!!"})
-    finally:
-        conn.close()
-
+# Loads from csv files
 @app.route('/erpjav/<tablename>/<nrows>', methods=['POST'])
 def load_table(tablename, nrows):
     nrows = int(nrows)
@@ -101,7 +76,7 @@ def backup_avro(tablename):
     elif tablename=="hired_employees":
         filename = 'backups\hired_employees.avro'
         #sql="SELECT * FROM dbo.HiredEmployees order by Id;"
-        sql="SELECT Id, [Name], Replace(convert(varchar,getdate(),111),'/','-')+'T'+convert(varchar,Datetime_Hired, 108)+'Z' Datetime_Hired, Department_Id, Job_Id FROM dbo.HiredEmployees order by Id;"
+        sql="SELECT Id, [Name], Replace(convert(varchar,Datetime_Hired,111),'/','-')+'T'+convert(varchar,Datetime_Hired, 108)+'Z' Datetime_Hired, Department_Id, Job_Id FROM dbo.HiredEmployees order by Id;"
     else:
         return jsonify({'Message':"Error in table name to backup"})
 
@@ -254,6 +229,32 @@ def gen_reports(report_name):  # antes listar_cursos
             resume_result.append(row_result)
         return jsonify({'Result':resume_result, 'Message':report_title})    
     except Exception as ex:
+        return jsonify({'Message':"Error !!!"})
+    finally:
+        conn.close()
+
+# Genera el contenido de una tabla en Json
+@app.route('/erpjav', methods=['GET'])
+def index_erp():  # antes listar_cursos
+    conn = connection()
+    try:
+        cursor = conn.cursor()
+        sql="SELECT * FROM dbo.Departments order by Id"
+        cursor.execute(sql)
+        #for row in cursor.fetchall():
+        #    cars.append({"id": row[0], "name": row[1], "year": row[2], "price": row[3]})
+        data=cursor.fetchall()
+        # mapping records
+        Deparments=[]
+        for row in data:
+            department={'Id':row[0], 'Department':row[1]}
+            Deparments.append(department)
+
+        #print(data)
+        #return "Hi Jeimar !! You app is going conectar sql .."
+        return jsonify({'Deparments':Deparments, 'Message':"Department list"})    
+    except Exception as ex:
+        #return "Error"
         return jsonify({'Message':"Error !!!"})
     finally:
         conn.close()
