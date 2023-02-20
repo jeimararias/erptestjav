@@ -4,6 +4,7 @@ from fastavro import writer, reader, parse_schema
 import pyodbc  ## from flask_mysqldb import MySQL
 import pandas
 
+#### This is not a good practice. It is only for this test. In real practice you must configure a file in secrets service ###
 def connection():
     svr = 'JEIMARARIAS\SQLEXPRESS' #Your server name 
     db = 'ERPTESTJAV' 
