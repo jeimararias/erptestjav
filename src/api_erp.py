@@ -2,15 +2,15 @@ from flask import Flask, jsonify
 from config import config
 from fastavro import writer, reader, parse_schema
 import pyodbc  ## from flask_mysqldb import MySQL
-#import pymssql
+#import pymssql  ## Library for conect to SQL SERVER
 import pandas
 
 #### This is not a good practice. It is only for this test. In real practice you must configure a file in secrets service ###
 def connection():
     svr = 'JEIMARARIAS\SQLEXPRESS' #Your server name 
     db = 'ERPTESTJAV' 
-    usr = 'sa' #Your login
-    pwd = 'Arijei2022' #Your login password
+    usr = 'erptestjav' #Your login
+    pwd = 'DaErpT2023$' #Your login password
     cstr = 'DRIVER={ODBC Driver 17 for SQL Server};SERVER='+svr+';DATABASE='+db+';UID='+usr+';PWD='+ pwd
     conn = pyodbc.connect(cstr)
     return conn
