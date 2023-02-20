@@ -2,6 +2,7 @@ from flask import Flask, jsonify
 from config import config
 from fastavro import writer, reader, parse_schema
 import pyodbc  ## from flask_mysqldb import MySQL
+#import pymssql
 import pandas
 
 #### This is not a good practice. It is only for this test. In real practice you must configure a file in secrets service ###
