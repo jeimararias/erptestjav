@@ -47,10 +47,16 @@ def load_table(tablename, nrows):
         batch=data.values.tolist()
         for row in batch:
             try:
+                # Validations
+                #for col in row:
+                #    print(col)
+                #    if col == None:
+                #        print("registro errado \n")
                 cursor.execute(sql, row)    #Inserta el registro
             except Exception as ex:
                 log_errados.append(row)     #print(row)
-            cursor.commit()  ##Toca hacer el commit inmediatamente porque sino, se pierden registros ***
+            finally:
+                cursor.commit()  ##Toca hacer el commit inmediatamente porque sino, se pierden registros ***
  
         #cursor.executemany(sql, batch) #Inserta el lote
 
