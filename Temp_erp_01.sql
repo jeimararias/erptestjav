@@ -25,7 +25,8 @@ delete from Jobs
 delete from Departments
 */
 
-----
+--
+Select * from vwEmployees
 
 --Resultado #1
 Select * 
