@@ -5,9 +5,9 @@ import pyodbc  ## from flask_mysqldb import MySQL
 #import pymssql  ## Library for conect to SQL SERVER
 import pandas
 
-#### This is not a good practice. It is only for this test. In real practice you must configure a file in secrets service ###
+#### This is not a good practice. It is only for this test. In real practice you must configure a file in secrets service/ AWS KMS ###
 def connection():
-    svr = 'JEIMARARIAS\SQLEXPRESS' #Your server name 
+    svr = 'JEIMARARIAS\SQLEXPRESS' #Your server name
     db = 'ERPTESTJAV' 
     usr = 'erptestjav' #Your login
     pwd = 'DaErpT2023$' #Your login password

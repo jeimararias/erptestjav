@@ -12,7 +12,6 @@ df = pandas.read_csv(filename, sep=',', header=None, chunksize=3)   #header=0
 for data in df:
     print(data)
 
-
 # print(data.shape)
 # print (data.head(20))
 # print (data)
