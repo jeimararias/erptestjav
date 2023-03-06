@@ -28,16 +28,23 @@ def lista_productos(p):
     print ("ELIJA EL PRODUCTO DESEADO\n")
     print ("Cod.PRODUCTO   PRECIO\n")
     print("Nombre producto: ",p[3][0])
-    for i in range(1,11):   #el ultimo no lo genera
+    for i in range(1,len(productos)+1):   #el ultimo no lo genera
         print("{}.{}..........{}".format(i,p[i][0],p[i][1]))
 
 #Uso de dictionarios#
 productos={1:["CAMISA",35], 2:["CINTURON",10], 3:["ZAPATOS",50], 4:["PANTALON",40], 5:["CALCETINES",5], 6:["FALDAS",20], 7:["GORRAS",7], 8:["SUETER",15], 9:["CORBATA",10], 10:["CHAQUETA",35]}
 
+print("dict_prod: ", productos)
+print("Keys:", productos.keys())
+print("Values:", productos.values())
+
+print("Cantidad de productos: ",len(productos))
+
+#"""
 monto_total=0.0
 while True:
     lista_productos(productos)
-    cod_p=int(input("Ingrese codigo de 1 a 10: "))
+    cod_p=int(input("Ingrese codigo: "))
     print("El articulo escogido es {}... Costo unitario: {}".format(productos[cod_p][0],productos[cod_p][1]))
     cantidad=float(input("Ingrese cantidad : "))
     valor_articulo = cantidad * productos[cod_p][1]
@@ -47,8 +54,8 @@ while True:
     if y not in ["y","s"]:
         break
 
-print("*** Monto TOATAL: ", monto_total)
-
+print("*** Monto TOTAL: ", monto_total)
+#"""
 
 #dictionary={1:35, 2:10, 3:50, 4:40, 5:5, 6:20, 7:7, 8:15, 9:10, 10:35}
 

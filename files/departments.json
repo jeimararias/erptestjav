@@ -1,0 +1,14 @@
+[
+    {"Id":1,"Department":"Management"},
+    {"Id":2,"Department":"Sales"},
+    {"Id":3,"Department":"Research and Development"},
+    {"Id":4,"Department":"Business Development"},
+    {"Id":5,"Department":"Engineering"},
+    {"Id":6,"Department":"Human Resources"},
+    {"Id":7,"Department":"Services"},
+    {"Id":8,"Department":"Support"},
+    {"Id":9,"Department":"Marketing"},
+    {"Id":10,"Department":"Training"},
+    {"Id":11,"Department":"Legal"},
+    {"Id":12,"Department":"Accounting"}
+]

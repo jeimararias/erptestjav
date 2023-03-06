@@ -1,11 +1,13 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from config import config
+from config import connection
 from fastavro import writer, reader, parse_schema
 import pyodbc  ## from flask_mysqldb import MySQL
 #import pymssql  ## Library for conect to SQL SERVER
 import pandas
 
 #### This is not a good practice. It is only for this test. In real practice you must configure a file in secrets service/ AWS KMS ###
+"""
 def connection():
     svr = 'JEIMARARIAS\SQLEXPRESS' #Your server name
     db = 'ERPTESTJAV' 
@@ -14,7 +16,8 @@ def connection():
     cstr = 'DRIVER={ODBC Driver 17 for SQL Server};SERVER='+svr+';DATABASE='+db+';UID='+usr+';PWD='+ pwd
     conn = pyodbc.connect(cstr)
     return conn
-
+"""
+    
 # Crear un servidor
 app=Flask(__name__)
 #conn = connection()
@@ -261,6 +264,23 @@ def index_erp():  # antes listar_cursos
         #print(data)
         #return "Hi Jeimar !! You app is going conectar sql .."
         return jsonify({'Deparments':Deparments, 'Message':"Department list"})    
+    except Exception as ex:
+        #return "Error"
+        return jsonify({'Message':"Error !!!"})
+    finally:
+        conn.close()
+
+# Carga registro desde el JSON
+@app.route('/departments', methods=['POST'])
+def insert_department():
+    #print(request.json)  
+    try:
+        conn = connection()
+        cursor = conn.cursor()
+        sql="Insert into dbo.Departments (Id, Department) Values ({0}, '{1}')".format(request.json['Id'],request.json['Department'])
+        cursor.execute(sql)
+        cursor.commit()  ##Toca hacer el commit inmediatamente porque sino, se pierden registros ***
+        return jsonify({'Message':"Department has been created"})
     except Exception as ex:
         #return "Error"
         return jsonify({'Message':"Error !!!"})
