@@ -1,3 +1,4 @@
+#from flask import jsonify
 import json
 import pandas
 from config import connection
@@ -66,6 +67,7 @@ def save_table_json(tablename):
     print("Dict: \n",data_dict)
     with open('files\\' + tablename + '.json', 'w') as json_file:
         json.dump(data_dict, json_file) #json_file es una lista de diccionarios
+        #json.dump(jsonify(data_dict), json_file) #json_file es una lista de diccionarios
 
     cursor.close()
     conn.close()
