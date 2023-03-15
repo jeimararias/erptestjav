@@ -1,6 +1,6 @@
 from pymongo import MongoClient # El cliente de MongoDB
 from producto import Producto # La clase Producto
-from bson.objectid import ObjectId # Para crear ObjectId, porque _id como cadena no funciona
+from bson.objectid import ObjectId  #Para crear ObjectId, porque _id como cadena no funciona
 
 def obtener_bd():
     host = "localhost"
@@ -46,8 +46,6 @@ def eliminar(id):
         '_id': ObjectId(id)
         })
     return resultado.deleted_count
-
-
 
 creditos = """==========================================================
 	                CRUD de MongoDB y Python
