@@ -75,5 +75,27 @@ def save_table_json(tablename):
 #data=open_json("files\departments.json")
 #load_table_json("departments", data)
 
-save_table_json("vwEmployees")
+#save_table_json("vwEmployees")
+
+def open_json(archivo):
+    with open(archivo, 'r') as f:
+        data = json.load(f)
+    f.close()
+    return(data)
+
+def read_json(fjson):
+    for rowj in fjson:
+        #print(type(rowj),rowj)
+        print (rowj["Id"], rowj["Name"], rowj["Department"], rowj["Job"])
+        #print (rowj.keys())
+        #print (rowj.values())
+        #print (len(rowj))
+
+data=open_json('./files/vwEmployees.json')
+print("Type of data: ", type(data))
+#print("Data: \n",data)
+read_json(data)
+
+
+
 
