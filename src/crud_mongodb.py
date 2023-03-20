@@ -47,6 +47,18 @@ def eliminar(id):
         })
     return resultado.deleted_count
 
+def query_adhoc(query):
+    print("Obteniendo resultados..\n")
+    myclient = MongoClient("mongodb://localhost:27017/")
+    mydb = myclient["prueba"]
+    mycol = mydb["productos"]
+
+    #mydoc = mycol.find(query).sort("nombre", -1)
+    mydoc = mycol.find(query).sort("nombre", -1).limit(2)   #limit maxima cantidad de registros a traer
+
+    for x in mydoc:
+        print(x)
+
 creditos = """==========================================================
 	                CRUD de MongoDB y Python
                                            
@@ -63,6 +75,7 @@ menu = """Bienvenido a la tienda.
 3 - Actualizar
 4 - Eliminar
 5 - Salir
+9 - Consulta Adhoc
 """
 eleccion = None
 print(creditos)
@@ -94,9 +107,13 @@ while eleccion is not 5:
         producto = Producto(nombre, precio, cantidad)
         productos_actualizados = actualizar(id, producto)
         print("Número de productos actualizados: ", productos_actualizados)
-
     elif eleccion is 4:
         print("Eliminar")
         id = input("Dime el id: ")
         productos_eliminados = eliminar(id)
         print("Número de productos eliminados: ", productos_eliminados)
+    elif eleccion is 9:
+        #myquery = { "nombre": { "$regex": "^z" } }
+        stringToFind = input("Ingrese string a buscar: ")
+        myquery = { "nombre": { "$gt": stringToFind } }
+        query_adhoc(myquery)
