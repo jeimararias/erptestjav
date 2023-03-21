@@ -19,7 +19,7 @@ class DAO():
         if self.conexion.is_connected():
             try:
                 cursor=self.conexion.cursor()
-                cursor.execute("Select * from jobs order by job asc")
+                cursor.execute("Select * from jobs order by Job_Id asc")
                 resultados=cursor.fetchall()
                 return resultados
             except Error as ex:
@@ -60,6 +60,36 @@ class DAO():
                 cursor.execute(sql.format(codigoJob))
                 self.conexion.commit()
                 print ("¡ Job {0} eliminado !\n".format(codigoJob))
+                return "OK"
+            except Error as ex:
+                print ("Error al intentar la conexión: {0}".format(ex))
+                return "Error al intentar la conexión: {0}".format(ex)
+            finally:
+                print("Continua...")
+
+    def insertarVariosJobs(self):
+        """
+        data = [
+        ('Jane', date(2005, 2, 12)),
+        ('Joe', date(2006, 5, 23)),
+        ('John', date(2010, 10, 3)),
+        ]
+        """        
+        #print("Tipo codigoJob: ", type(codigoJob))
+        if self.conexion.is_connected():
+            misJobs=[ 
+                      (30, "JOB 30"),
+                      (31, "JOB 31"),
+                      (32, "JOB 32"),
+                      (33, "JOB 33")
+                    ]
+            try:
+                cursor=self.conexion.cursor()
+                #sql="Insert into jobs (Job_Id, Job) Values (?, ?)"  #Bajo otra medio
+                sql="Insert into jobs (Job_Id, Job) Values (%s, %s)"
+                cursor.executemany(sql, misJobs)        #Inserta varios registros
+                self.conexion.commit()
+                print ("¡ Job creados !\n")
                 return "OK"
             except Error as ex:
                 print ("Error al intentar la conexión: {0}".format(ex))
