@@ -13,10 +13,11 @@ def menuPrincipal():
         print("3.- Upd Jobs")
         print("4.- Del Jobs")
         print("5.- Salir")
+        print("6.- Insertar varios")
         print("------")
         opcion=int(input("Digite opcion: "))
 
-        if opcion<1 or opcion>5:
+        if opcion<1 or opcion>6:
             print("Opcion incorrecta ingrese nuevamente")
         elif opcion==5:
             continuar=False
@@ -57,7 +58,7 @@ def ejecutarOpcion(opcion):
                 else:
                     print("Código de Job a actualizar no encontrado..\n")
             else:
-                print("No se encontraron Jobs...")
+                print("No se encontraron Jobs...")               
         #except:
         finally:
             print("Ocurrió un error ..")
@@ -72,6 +73,11 @@ def ejecutarOpcion(opcion):
                     print("Código de Job no encontrado\n")
             else:
                 print("No se encontraron Jobs...")
+        except:
+            print("Ocurrió un error ..")
+    elif opcion == 6:
+        try:
+            dao.insertarVariosJobs()
         except:
             print("Ocurrió un error ..")
     else:
