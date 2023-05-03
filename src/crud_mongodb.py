@@ -7,8 +7,10 @@ def obtener_bd():
     puerto = "27017"
     usuario = "user123"
     palabra_secreta = "pass123"
-    base_de_datos = "prueba"
-    cliente = MongoClient("mongodb://{}:{}@{}:{}".format(usuario, palabra_secreta, host, puerto))
+    base_de_datos = "mydatabase"
+    #cliente = MongoClient("mongodb://{}:{}@{}:{}".format(usuario, palabra_secreta, host, puerto))
+    cliente = MongoClient('mongodb://localhost:27017/')
+
     return cliente[base_de_datos]
 
 def insertar(producto):
@@ -49,12 +51,15 @@ def eliminar(id):
 
 def query_adhoc(query):
     print("Obteniendo resultados..\n")
-    myclient = MongoClient("mongodb://localhost:27017/")
-    mydb = myclient["prueba"]
-    mycol = mydb["productos"]
+    #myclient = MongoClient("mongodb://localhost:27017/")
+    #mydb = myclient["mydatabase"]
+
+    base_de_datos = obtener_bd()
+    mycol = base_de_datos["productos"]
+    #productos = base_de_datos.productos
 
     #mydoc = mycol.find(query).sort("nombre", -1)
-    mydoc = mycol.find(query).sort("nombre", -1).limit(2)   #limit maxima cantidad de registros a traer
+    mydoc = mycol.find(query).sort("nombre", -1).limit(5)   #limit maxima cantidad de registros a traer
 
     for x in mydoc:
         print(x)

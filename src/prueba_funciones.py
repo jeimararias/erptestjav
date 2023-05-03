@@ -1,4 +1,5 @@
 import random
+import math
 
 def len_string(A):
 	i=0
@@ -69,6 +70,73 @@ def adivinar_string(A, N):
 
 def Future_Value(C,i,n):
 	return C*(1+i/100)**n
+
+def distancia (array):
+	distancia = 0
+	for i in range(len(array)):
+		distancia += (array[i][0] - array[i][1])**2
+	print("Distancias al cuadrado: ", distancia)
+	distancia = math.sqrt(distancia)
+	return distancia
+
+def IsCasiPalindromo(word):
+	lgw = len(word)-1
+	mitad = int(len(word)//2)
+	casi = 0
+	for i in range(mitad):
+		if word[i]!=word[lgw]:
+			casi+=1
+		lgw -= 1
+	if casi <= 1:
+		return(True)
+	else:
+		return(False)
+
+def numMasPopular(array):
+	#Returna el numero de cantidad repetidas mayor, pero si el numero se repite, retorna el mayor de los dos 
+	num = {}
+	for i in array:
+		if i in num:
+			num[i] += 1
+		else:
+			num[i] = 1
+
+	mayor = 0
+	numero = None
+	for i in num:
+		print(i, num[i])
+		if num[i] > mayor:
+			mayor = num[i]
+			numero = i
+		elif num[i] == mayor and i > numero:
+			numero = i
+			
+	return numero
+		 
+array = [14,20,14,10,20,14]
+print(numMasPopular(array))
+
+
+#print(numMasPopular(array))
+
+
+
+
+palabra="amanda"
+
+#print(IsCasiPalindromo(palabra))
+
+
+
+
+puntos = [(1,3), (3,5), (5,7)]
+
+#print(distancia(puntos))
+
+
+
+
+
 
 #valor=Future_Value(10000,4.5,20)
 #print("VF= ",valor)

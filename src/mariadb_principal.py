@@ -14,10 +14,13 @@ def menuPrincipal():
         print("4.- Del Jobs")
         print("5.- Salir")
         print("6.- Insertar varios")
+        print("7.- Insertar One con fecha Lista")
+        print("8.- Insertar One con fecha Dictionario")
+        print("9.- Pendiente")
         print("------")
         opcion=int(input("Digite opcion: "))
 
-        if opcion<1 or opcion>6:
+        if opcion<1 or opcion>9:
             print("Opcion incorrecta ingrese nuevamente")
         elif opcion==5:
             continuar=False
@@ -80,8 +83,21 @@ def ejecutarOpcion(opcion):
             dao.insertarVariosJobs()
         except:
             print("Ocurrió un error ..")
+    elif opcion == 7:
+        try:
+            dao.insertarOneJob_Lista()
+        except:
+            print("Ocurrió un error ..")
+    elif opcion == 8:
+        try:
+            dao.insertarOneJob_Dict()
+        #except:
+            #print("Ocurrió un error ..")
+        finally:
+            pass
     else:
         print("Opcion no valida")
 
-menuPrincipal()
+if __name__ == '__main__':  ##Ingreso a la función principal
+    menuPrincipal()
 

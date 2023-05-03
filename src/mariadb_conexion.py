@@ -1,5 +1,6 @@
 import mysql.connector
 from mysql.connector import Error
+from datetime import datetime, date   #Formato fechas horas
 
 class DAO():
 
@@ -68,25 +69,18 @@ class DAO():
                 print("Continua...")
 
     def insertarVariosJobs(self):
-        """
-        data = [
-        ('Jane', date(2005, 2, 12)),
-        ('Joe', date(2006, 5, 23)),
-        ('John', date(2010, 10, 3)),
-        ]
-        """        
         #print("Tipo codigoJob: ", type(codigoJob))
         if self.conexion.is_connected():
             misJobs=[ 
-                      (30, "JOB 30"),
-                      (31, "JOB 31"),
-                      (32, "JOB 32"),
-                      (33, "JOB 33")
+                      (30, "JOB 30", "2005-12-23 23:23:23"),
+                      (31, "JOB 31", "2005-12-23 23:23:23"),
+                      (32, "JOB 32", "2005-12-23 23:23:23"),
+                      (33, "JOB 33", "2005-12-23 23:23:23")
                     ]
             try:
                 cursor=self.conexion.cursor()
                 #sql="Insert into jobs (Job_Id, Job) Values (?, ?)"  #Bajo otra medio
-                sql="Insert into jobs (Job_Id, Job) Values (%s, %s)"
+                sql="Insert into jobs (Job_Id, Job, FechaIngreso) Values (%s, %s, %s)"
                 cursor.executemany(sql, misJobs)        #Inserta varios registros
                 self.conexion.commit()
                 print ("¡ Job creados !\n")
@@ -94,5 +88,47 @@ class DAO():
             except Error as ex:
                 print ("Error al intentar la conexión: {0}".format(ex))
                 return "Error al intentar la conexión: {0}".format(ex)
+            finally:
+                print("Continua...")
+
+    def insertarOneJob_Lista(self):
+        #print("Tipo codigoJob: ", type(codigoJob))
+        if self.conexion.is_connected():
+            job=(42, "JOB prueba Fecha 2", datetime(2023, 10, 23, 15, 30, 45))
+            try:
+                cursor=self.conexion.cursor()
+                #sql="Insert into jobs (Job_Id, Job) Values (?, ?)"  #Bajo otra medio
+                sql="Insert into jobs (Job_Id, Job, FechaIngreso) Values (%s, %s, %s)"
+                #cursor.execute(sql.format(job[0], job[1], job[2]))
+                cursor.execute(sql, job)
+                self.conexion.commit()
+                print ("¡ Job creado !\n")
+                return "OK"
+            except Error as ex:
+                print ("Error al intentar la conexión: {0}".format(ex))
+                return "Error al intentar la conexión: {0}".format(ex)
+            finally:
+                print("Continua...")
+
+    def insertarOneJob_Dict(self):
+        #print("Tipo codigoJob: ", type(codigoJob))
+        if self.conexion.is_connected():
+
+            jobD={"Job_ID":51, "Job":"JOB prueba Fecha diccionario",  "FechaIngreso": datetime(2022, 8, 31, 13, 15, 59)}
+            print("Tipo objeto jobD:", type(jobD))
+            try:
+                cursor=self.conexion.cursor()
+                #sql="Insert into jobs (Job_Id, Job) Values (?, ?)"  #Bajo otra medio
+                sql="Insert into jobs (Job_Id, Job, FechaIngreso) Values (%s, %s, %s)"
+                #cursor.execute(sql, jobD["Job_ID"],jobD["Job"],jobD["FechaIngreso"])
+                job = list(jobD.values())
+                print("Tipo objeto job:", type(job))
+                cursor.execute(sql, job)
+                self.conexion.commit()
+                print ("¡ Job creado !\n")
+                return "OK"
+            #except Error as ex:
+            #    print ("Error al intentar la conexión: {0}".format(ex))
+            #    return "Error al intentar la conexión: {0}".format(ex)
             finally:
                 print("Continua...")
