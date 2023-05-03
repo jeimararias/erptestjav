@@ -1,23 +1,11 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request  #Servidor API
 from config import config
 from config import connection
-from fastavro import writer, reader, parse_schema
-import pyodbc  ## from flask_mysqldb import MySQL
+from fastavro import writer, reader, parse_schema   #Para manejar archivos avor
+import pyodbc  ## from flask_mysqldb import MySQL   #Coneexión con SQL SERVER
 #import pymssql  ## Library for conect to SQL SERVER
-import pandas
+import pandas       #Para manejo de archivos planos: csv
 
-#### This is not a good practice. It is only for this test. In real practice you must configure a file in secrets service/ AWS KMS ###
-"""
-def connection():
-    svr = 'JEIMARARIAS\SQLEXPRESS' #Your server name
-    db = 'ERPTESTJAV' 
-    usr = 'erptestjav' #Your login
-    pwd = 'DaErpT2023$' #Your login password
-    cstr = 'DRIVER={ODBC Driver 17 for SQL Server};SERVER='+svr+';DATABASE='+db+';UID='+usr+';PWD='+ pwd
-    conn = pyodbc.connect(cstr)
-    return conn
-"""
-    
 # Crear un servidor
 app=Flask(__name__)
 #conn = connection()
