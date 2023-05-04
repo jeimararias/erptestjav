@@ -112,10 +112,26 @@ def numMasPopular(array):
 			numero = i
 			
 	return numero
-		 
-array = [14,20,14,10,20,14]
-print(numMasPopular(array))
 
+def fizzBuzz(n):
+	#if not (0<n<(10**5)):
+	#    return None
+
+	for i in range(1,n+1):
+		if(i%3 == 0 and i%5==0):
+			print("FizzBuzz")
+		elif(i%3 == 0 and i%5!=0):
+			print("Fizz")
+		elif(i%3 != 0 and i%5==0):
+			print("Buzz")
+		else:
+			print(i)	
+ 
+
+array = [14,20,14,10,20,14]
+#print(numMasPopular(array))
+
+fizzBuzz(15)
 
 #print(numMasPopular(array))
 
